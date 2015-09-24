@@ -2998,7 +2998,7 @@ void t_go_generator::generate_deserialize_set_element(ofstream& out,
   string elem = tmp("_elem");
   t_field felem(tset->get_elem_type(), elem);
   felem.set_req(t_field::T_OPT_IN_REQ_OUT);
-  generate_deserialize_field(out, &felem, true, "", NOT_IN_CLASS, NO_COERCE_DATA, NOT_IN_KEY, IN_CONTAINER, USE_TRUE_TYPE);
+  generate_deserialize_field(out, &felem, true, "", NOT_IN_CLASS, NO_COERCE_DATA, NOT_IN_KEY, IN_CONTAINER, USE_DEFAULT_TYPE);
   indent(out) << prefix << "[" << elem << "] = true" << endl;
 }
 
@@ -3013,7 +3013,7 @@ void t_go_generator::generate_deserialize_list_element(ofstream& out,
   string elem = tmp("_elem");
   t_field felem(((t_list*)tlist)->get_elem_type(), elem);
   felem.set_req(t_field::T_OPT_IN_REQ_OUT);
-  generate_deserialize_field(out, &felem, true, "", NOT_IN_CLASS, NO_COERCE_DATA, NOT_IN_KEY, IN_CONTAINER, USE_TRUE_TYPE);
+  generate_deserialize_field(out, &felem, true, "", NOT_IN_CLASS, NO_COERCE_DATA, NOT_IN_KEY, IN_CONTAINER, USE_DEFAULT_TYPE);
   indent(out) << prefix << " = append(" << prefix << ", " << elem << ")" << endl;
 }
 
@@ -3545,11 +3545,11 @@ string t_go_generator::type_to_go_type_with_opt(t_type* type,
     return maybe_pointer + string("map[") + keyType + "]" + valueType;
   } else if (type->is_set()) {
     t_set* t = (t_set*)type;
-    string elemType = type_to_go_key_type(t->get_elem_type()->get_true_type());
+    string elemType = type_to_go_key_type(t->get_elem_type());
     return maybe_pointer + string("map[") + elemType + string("]bool");
   } else if (type->is_list()) {
     t_list* t = (t_list*)type;
-    string elemType = type_to_go_type(t->get_elem_type()->get_true_type(), IN_CONTAINER);
+    string elemType = type_to_go_type(t->get_elem_type(), IN_CONTAINER);
     return maybe_pointer + string("[]") + elemType;
   } else if (type->is_typedef()) {
     return maybe_pointer + publicize(type_name(type));
