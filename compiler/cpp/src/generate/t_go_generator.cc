@@ -2995,7 +2995,7 @@ void t_go_generator::generate_deserialize_container(ofstream& out,
     out << indent() << "  return thrift.PrependError(\"error reading set begin: \", err)" << endl;
     out << indent() << "}" << endl;
     out << indent() << "tSet := make(map["
-        << type_to_go_key_type(t->get_elem_type()->get_true_type()) << "]bool, size)" << endl;
+        << type_to_go_key_type(t->get_elem_type()) << "]bool, size)" << endl;
     out << indent() << prefix << eq << " " << (pointer_field ? "&" : "") << "tSet" << endl;
   } else if (ttype->is_list()) {
     out << indent() << "_, size, err := iprot.ReadListBegin()" << endl;
